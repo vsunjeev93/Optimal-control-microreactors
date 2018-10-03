@@ -7,14 +7,14 @@ Following which the exact optimal profiles are obtained by solving a low dimensi
 
 If sequence is Bang Bang
 
-Bang_Bang.m- A multipoint BVP with 2 regions._ 
-Bang_Bang_bc-Boundary conditions for the BVP._
-Bang_Bang_objective_.m- Objective function which calls the multipoint BVP function and returns the objective function._ 
+Bang_Bang.m- A multipoint BVP with 2 regions.  
+Bang_Bang_bc-Boundary conditions for the BVP.  
+Bang_Bang_objective_.m- Objective function which calls the multipoint BVP function and returns the objective function.  
 
-If the sequence is Bang_bang_singular_bang
+If the sequence is Bang_bang_singular_bang  
 
-Bang_bang_singular_bang.m-A multipoint BVP with 4 regions._
-Bang_bang_singular_bang_bc-Boundary conditions for the BVP._
-Bang_bang_singualr_bang_objective.m-Objective function which calls the multipoint BVP function and returns the objective function._
+Bang_bang_singular_bang.m-A multipoint BVP with 4 regions.  
+Bang_bang_singular_bang_bc-Boundary conditions for the BVP.  
+Bang_bang_singualr_bang_objective.m-Objective function which calls the multipoint BVP function and returns the objective function.  
 
 In both the cases, fmincon is used to solve the optimization routine.
