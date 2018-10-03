@@ -1,0 +1,51 @@
+
+sets      i discretizations  /1*70/      ;
+
+set nonIC(i);
+         nonIC(i)=yes;
+         nonIC(i) $(ord(i)=1)=no;
+set nonBC(i);
+         nonBC(i)=yes;
+         nonBC(i) $(ord(i)=1)=no;
+         nonBC(i) $(ord(i)=card(i))=no;
+Scalar Da,B,gamma,CP,St,Bi,ds;
+Da=2.29;gamma=10.93;St=70.63;B=-21.04;CP=1.672;
+Bi=0;ds=0.0145;
+*Da=0.257;B=-20;gamma=10;CP=0.226;St=672;Bi=0;ds=0.0145;
+*Da=2.57;B=-20;gamma=10;CP=2.26;St=6720.7;Bi=0;ds=0.0145;
+
+Variables u(i),T(i),Tw(i),psi(i),J;
+positive variables u;
+*psi.up(i)=53.12 ;
+*psi.up(i)=531.2 ;
+psi.up(i)=47561.1 ;
+psi.lo(i)=0;
+*psi.lo(i)=-100000  ;
+* Boundary conditions
+u.fx(i)$(ord(i)=1)=1;
+T.fx(i)$(ord(i)=1)=0;
+
+
+Equations cost
+         eqn_u,eqn_T,eqn_Tw,Tw_bc1,Tw_bc2;
+cost ..   J =e=0.0*u('70')+1*sum(i,T(i)*T(i))*ds+0*sum(i,power(Tw(i),2))*ds;
+*cost ..   J =e= 0;
+eqn_u(i)$(nonIC(i)).. (u(i)-u(i-1))/ds+Da*exp(T(i)/(1+T(i)/gamma))*u(i) =e= 0;
+eqn_T(i)$(nonIC(i)).. (T(i)-T(i-1))/ds-B*Da*exp(T(i)/(1+T(i)/gamma))*u(i)+St*(T(i)-Tw(i)) =e=0;
+eqn_Tw(i)$(nonBC(i)).. (Tw(i+1)-2*Tw(i)+Tw(i-1))/ds**2+St/CP*(T(i)-Tw(i))+psi(i)/CP =e=0 ;
+*eqn_Tw(i)$(nonBC(i)).. (Tw(i+1)-2*Tw(i)+Tw(i-1))/ds**2+St/CP*(T(i)-Tw(i))-1/CP =e=0 ;
+Tw_bc1 .. -(Tw('2')-Tw('1'))/ds-Bi*(0-Tw('1')) =e=0;
+Tw_bc2 ..  -(Tw('70')-Tw('69'))/ds+Bi*(0-Tw('70')) =e=0  ;
+Model Optimal_Control /all/;
+option nlp=IPOPT;
+Solve Optimal_Control Using NLP Minimizing J
+
+FIle q /q.txt/
+put q
+loop(i,put psi.l(i),T.l(i),Tw.l(i), u.l(i) /);
+
+
+
+
+
+
